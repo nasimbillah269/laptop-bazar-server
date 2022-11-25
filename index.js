@@ -76,6 +76,13 @@ async function run() {
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         })
+        app.get('/users/:option', async (req, res) => {
+            const option = req.params.option;
+            console.log(option);
+            const query = { option: option }
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        })
 
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
