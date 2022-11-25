@@ -23,6 +23,7 @@ async function run() {
         const categoriesCollection = client.db('laptopBazar').collection('categories');
         const productsCollection = client.db('laptopBazar').collection('products');
         const bookingsCollection = client.db('laptopBazar').collection('bookings');
+        const addProductsCollection = client.db('laptopBazar').collection('addProducts');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -48,6 +49,12 @@ async function run() {
             const bookings = await bookingsCollection.find(query).toArray();
             res.send(bookings)
         })
+
+        app.post('/addProducts', async (req, res) => {
+            const addProduct = req.body;
+            const result = await addProductsCollection.insertOne(addProduct);
+            res.send(result)
+        });
 
     }
     finally {
