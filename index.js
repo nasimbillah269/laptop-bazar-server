@@ -24,6 +24,7 @@ async function run() {
         const productsCollection = client.db('laptopBazar').collection('products');
         const bookingsCollection = client.db('laptopBazar').collection('bookings');
         const addProductsCollection = client.db('laptopBazar').collection('addProducts');
+        const usersCollection = client.db('laptopBazar').collection('users');
 
         app.get('/categories', async (req, res) => {
             const query = {}
@@ -68,6 +69,41 @@ async function run() {
             const filter = { _id: ObjectId(id) }
             const result = await addProductsCollection.deleteOne(filter);
             res.send(result)
+        })
+
+        app.get('/users', async (req, res) => {
+            const query = {}
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        })
+
+        app.get('/users/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await usersCollection.findOne(query);
+            res.send({ isAdmin: user?.role === 'admin' });
+        })
+
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result)
+        })
+
+        app.put('/users/admin/:id', async (req, res) => {
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updatedDoc = {
+                $set: {
+                    role: 'admin'
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedDoc, options);
+            res.send(result)
+
         })
     }
     finally {
