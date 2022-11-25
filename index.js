@@ -78,10 +78,22 @@ async function run() {
         })
         app.get('/users/:option', async (req, res) => {
             const option = req.params.option;
-            console.log(option);
+
             const query = { option: option }
             const users = await usersCollection.find(query).toArray();
             res.send(users);
+        })
+        app.get('/users/option/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await usersCollection.findOne(query);
+            res.send({ isOption: user?.option === 'seller' });
+        })
+        app.get('/users/option/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await usersCollection.findOne(query);
+            res.send({ isOption: user?.option === 'user' });
         })
 
         app.get('/users/admin/:email', async (req, res) => {
