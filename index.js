@@ -127,17 +127,17 @@ async function run() {
             const users = await usersCollection.find(query).toArray();
             res.send(users);
         })
-        app.get('/users/option/:email', async (req, res) => {
+        app.get('/users/seller/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email }
             const user = await usersCollection.findOne(query);
-            res.send({ isOption: user?.option === 'seller' });
+            res.send({ isSeller: user?.option === 'seller' });
         })
-        app.get('/users/option/:email', async (req, res) => {
+        app.get('/users/buyer/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email }
             const user = await usersCollection.findOne(query);
-            res.send({ isOption: user?.option === 'user' });
+            res.send({ isBuyer: user?.option === 'user' });
         })
 
         app.get('/users/admin/:email', async (req, res) => {
